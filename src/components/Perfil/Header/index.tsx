@@ -7,6 +7,10 @@ import { HomeLink, HeaderDiv, CartBtn } from "./styles";
 export default function Header() {
   const dispatch = useDispatch();
   const itemsOnCart = useSelector((state: RootState) => state.cart.items);
+  const totalProducts = itemsOnCart.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   return (
     <>
@@ -15,7 +19,7 @@ export default function Header() {
           <HomeLink to="/">Restaurantes</HomeLink>
           <img src={logo} />
           <CartBtn onClick={() => dispatch(open())}>
-            {itemsOnCart.length} produto(s) no carrinho
+            {totalProducts} produto(s) no carrinho
           </CartBtn>
         </div>
       </HeaderDiv>

@@ -10,8 +10,12 @@ export type DeliveryData = {
   complement?: string;
 };
 
+type CartItem = Prato & {
+  quantity: number;
+};
+
 type CartState = {
-  items: Prato[];
+  items: CartItem[];
   isOpen: boolean;
   deliveryData: DeliveryData | null;
 };
@@ -27,10 +31,31 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     add: (state, action: PayloadAction<Prato>) => {
-      state.items.push(action.payload);
+      const existingItem = state.items.find((item) => item.id === action.payload.id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.items.push({ ...action.payload, quantity: 1 });
+      }
     },
     remove: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
+    },
+    increaseQuantity: (state, action: PayloadAction<number>) => {
+      const item = state.items.find((cartItem) => cartItem.id === action.payload);
+      if (item) {
+        item.quantity += 1;
+      }
+    },
+    decreaseQuantity: (state, action: PayloadAction<number>) => {
+      const item = state.items.find((cartItem) => cartItem.id === action.payload);
+      if (item) {
+        if (item.quantity > 1) {
+          item.quantity -= 1;
+        } else {
+          state.items = state.items.filter((cartItem) => cartItem.id !== action.payload);
+        }
+      }
     },
     open: (state) => {
       state.isOpen = true;
@@ -48,6 +73,14 @@ const cartSlice = createSlice({
   },
 });
 
-export const { add, remove, open, close, setDeliveryData, clearCart } =
-  cartSlice.actions;
+export const {
+  add,
+  remove,
+  increaseQuantity,
+  decreaseQuantity,
+  open,
+  close,
+  setDeliveryData,
+  clearCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

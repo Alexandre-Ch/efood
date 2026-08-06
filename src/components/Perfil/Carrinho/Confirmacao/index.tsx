@@ -116,10 +116,10 @@ export function Confirmacao({
           {itemsNoCarrinho.map((item) => (
             <div key={item.id}>
               <p>
-                <span>{item.nome}</span>
+                <span>{item.nome}</span> x{item.quantity}
               </p>
               <p>
-                R$<span>{item.preco.toFixed(2).replace(".", ",")}</span>
+                R$<span>{(item.preco * item.quantity).toFixed(2).replace(".", ",")}</span>
               </p>
             </div>
           ))}

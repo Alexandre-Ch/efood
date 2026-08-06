@@ -44,3 +44,26 @@ export const DelBtn = styled.button`
     height: 16px;
   }
 `;
+
+export const QuantityControls = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+
+  button {
+    background: ${cores.bege};
+    border: 1px solid ${cores.cinza};
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  span {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+  }
+`;

@@ -25,7 +25,7 @@ export function Carrinho() {
   if (!isOpen) return null;
 
   const totalValue = itemsOnCart.reduce((acumulador, itemAtual) => {
-    return acumulador + itemAtual.preco;
+    return acumulador + itemAtual.preco * itemAtual.quantity;
   }, 0);
 
   const handleContinuarEntrega = () => {

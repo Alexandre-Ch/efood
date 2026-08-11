@@ -77,7 +77,7 @@ export function Confirmacao({
                 Nome do Receptor: <span>{deliveryData.receiver}</span>
               </p>
               <p>
-                CEP: <span>{deliveryData.receiver}</span>
+                CEP: <span>{deliveryData.zipCode}</span>
               </p>
               <p>
                 Cidade: <span>{deliveryData.city}</span>

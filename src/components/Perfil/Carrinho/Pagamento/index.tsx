@@ -10,6 +10,7 @@ import {
   DeliveryInput,
 } from "../Entrega/styles";
 import { Confirmacao } from "../Confirmacao";
+import { Loading } from "../../../Loading";
 
 import { CheckoutBTN } from "../styles";
 import { usePurchaseMutation } from "../../../../services/api";
@@ -27,8 +28,8 @@ export function Pagamento({
   totalValue,
   onFinished,
 }: PagamentoProps) {
-  const [confirmation, setConfirmation] = useState(false);
-  const [purchase, { isSuccess, data }] = usePurchaseMutation();
+  const [submitted, setSubmitted] = useState(false);
+  const [purchase, { isLoading, isSuccess, isError, data }] = usePurchaseMutation();
 
   const deliveryData = useSelector(
     (state: RootState) => state.cart.deliveryData,
@@ -56,7 +57,7 @@ export function Pagamento({
     },
     validationSchema: validacaoPagamento,
     onSubmit: (values) => {
-      if (!deliveryData) return;
+      if (!deliveryData || itemsNoCarrinho.length === 0) return;
 
       purchase({
         products: itemsNoCarrinho.map((item) => ({
@@ -86,13 +87,29 @@ export function Pagamento({
         },
       });
 
-      setConfirmation(true);
+      setSubmitted(true);
     },
   });
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError && submitted) {
+    return (
+      <DeliveryForm>
+        <h2>Erro ao finalizar o pedido</h2>
+        <p>Ocorreu um problema ao enviar os dados de pagamento. Tente novamente.</p>
+        <CheckoutBTN type="button" onClick={() => setSubmitted(false)}>
+          Voltar ao pagamento
+        </CheckoutBTN>
+      </DeliveryForm>
+    );
+  }
+
   return (
     <>
-      {!confirmation && !isSuccess ? (
+      {!submitted && !isSuccess ? (
         <>
           <DeliveryForm onSubmit={form.handleSubmit}>
             <h2>
